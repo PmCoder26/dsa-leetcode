@@ -58,6 +58,112 @@ public class LinkedLists {
         }
     }
 
+    /*
+        Given the head of a linked list, return the node where the cycle begins.
+        If there is no cycle, return null. There is a cycle in a linked list if
+        there is some node in the list that can be reached again by continuously
+        following the next pointer. Internally, pos is used to denote the index
+        of the node that tail's next pointer is connected to (0-indexed). It is
+        -1 if there is no cycle. Note that pos is not passed as a parameter.
+        Do not modify the linked list.
+     */
+
+    public ListNode detectCycle(ListNode head) {
+        if(head == null || head.next == null){
+            return null;
+        }
+        else{
+            if(head.next != null){
+                if(head.next.next == head){
+                    return head;
+                }
+            }
+            ListNode slow = head;
+            ListNode fast = head;
+            while(fast != null && fast.next != null){
+                slow = slow.next;
+                fast = fast.next.next;
+                if(slow == fast){
+                    ListNode curr = head;
+                    while(curr != fast){
+                        fast = fast.next;
+                        curr = curr.next;
+                    }
+                    return curr;
+                }
+            }
+
+            return null;
+        }
+    }
+
+
+    /*
+        Given the head of a singly linked list and an integer k, split the linked list
+        into k consecutive linked list parts. The length of each part should be as equal
+        as possible: no two parts should have a size differing by more than one. This may
+        lead to some parts being null. The parts should be in the order of occurrence in
+        the input list, and parts occurring earlier should always have a size greater than
+        or equal to parts occurring later. Return an array of the k parts.
+     */
+
+    public ListNode[] splitListToParts(ListNode head, int k) {
+        ListNode[] result = new ListNode[k];
+
+        if(head == null){
+            return result;
+        }
+        else{
+            int listSize = 0;
+            ListNode curr = head;
+            // calculating list size;
+            while(curr != null){
+                listSize++;
+                curr = curr.next;
+            }
+            curr = head;
+            // if the size of the linked list is less than or equal to 'k'.
+            if(listSize <= k){
+                int i=0;
+                while(curr != null){
+                    ListNode temp = curr.next;
+                    curr.next = null;
+                    result[i++] = curr;
+                    curr = temp;
+                }
+                while(i < k){
+                    result[i++] = null;
+                }
+            }
+            // if the size of the linked list is greater.
+            // hence we need to partition the list.
+            else{
+                ListNode tempPtr = curr;
+                int rem = listSize % k;
+                int partSize = listSize / k;
+                int i = 0;
+                // partitioning the list.
+                while(i < k){
+                    int j = 1;
+                    while(j < partSize){
+                        tempPtr = tempPtr.next;
+                        j++;
+                    }
+                    if(rem > 0){
+                        tempPtr = tempPtr.next;
+                        rem--;
+                    }
+                    ListNode temp = tempPtr.next;
+                    tempPtr.next = null;
+                    result[i++] = curr;
+                    curr = temp;
+                    tempPtr = curr;
+                }
+            }
+            return result;
+        }
+    }
+
     public static void main(String[] args) {
 
     }
