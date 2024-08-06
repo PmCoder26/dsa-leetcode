@@ -164,6 +164,69 @@ public class LinkedLists {
         }
     }
 
+    /*
+            You are given the head of a singly linked-list. The list can be represented as:
+            L0 → L1 → … → Ln - 1 → Ln
+
+            Reorder the list to be on the following form:
+            L0 → Ln → L1 → Ln - 1 → L2 → Ln - 2 → …
+
+            You may not modify the values in the list's nodes. Only nodes themselves may be changed.
+     */
+    private ListNode getMid(ListNode head){                 // part 1.
+        if(head == null){
+            return head;
+        }
+        else{
+            ListNode slow = head;
+            ListNode fast = head.next;
+            while(fast != null && fast.next != null){
+                slow = slow.next;
+                fast = fast.next.next;
+            }
+            return slow;
+        }
+    }
+
+    private ListNode reverse(ListNode head){                // part 2.
+        if(head == null){
+            return head;
+        }
+        else{
+            ListNode prev = null;
+            while(head != null){
+                ListNode temp = head.next;
+                head.next = prev;
+                prev = head;
+                head = temp;
+            }
+            return prev;
+        }
+    }
+
+    public void reorderList(ListNode head) {                // part 3.
+        if(head == null || head.next == null){
+            return;
+        }
+        else{
+            ListNode curr = getMid(head);
+            ListNode part2 = reverse(curr.next);
+            curr.next = null;
+            curr = head;
+            ListNode currNext = curr;
+            ListNode part2Next = part2;
+            while(part2 != null){
+                currNext = currNext.next;
+                part2Next = part2.next;
+                curr.next = part2;
+                part2.next = currNext;
+                part2 = part2Next;
+                curr = currNext;
+            }
+            return;
+        }
+    }
+
     public static void main(String[] args) {
 
     }
