@@ -1,3 +1,4 @@
+import java.util.Stack;
 
 public class LinkedLists {
     private static class ListNode{
@@ -224,6 +225,49 @@ public class LinkedLists {
                 curr = currNext;
             }
             return;
+        }
+    }
+
+    /*
+            You are given the head of a linked list.
+            Remove every node which has a node with a greater value anywhere to the right side of it.
+            Return the head of the modified linked list.
+     */
+
+    private ListNode add(ListNode head, ListNode curr){
+        if(head == null){
+            return curr;
+        }
+        else{
+            curr.next = head;
+            head = curr;
+            return head;
+        }
+    }
+
+    public ListNode removeNodes(ListNode head) {
+        if(head == null || head.next == null){
+            return head;
+        }
+        else{
+            ListNode ans = null;
+            Stack<ListNode> st = new Stack();
+            int max = Integer.MIN_VALUE;
+            while(head != null){
+                st.push(head);
+                head = head.next;
+            }
+            while(!st.isEmpty()){
+                ListNode curr = st.pop();
+                if(curr.data >= max){
+                    ans = add(ans, curr);
+                    max = curr.data;
+                }
+                else{
+                    continue;
+                }
+            }
+            return ans;
         }
     }
 
