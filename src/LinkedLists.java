@@ -234,7 +234,7 @@ public class LinkedLists {
             Return the head of the modified linked list.
      */
 
-    private ListNode add(ListNode head, ListNode curr){
+    private ListNode add(ListNode head, ListNode curr){     // part 1
         if(head == null){
             return curr;
         }
@@ -245,7 +245,7 @@ public class LinkedLists {
         }
     }
 
-    public ListNode removeNodes(ListNode head) {
+    public ListNode removeNodes(ListNode head) {        // part 2
         if(head == null || head.next == null){
             return head;
         }
