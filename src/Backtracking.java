@@ -48,7 +48,44 @@ public class Backtracking {
         return result;
     }
 
-    public static void main(String[] args){
+    /*
+            Find all valid combinations of k numbers that sum up to n
+            such that the following conditions are true:
+                Only numbers 1 through 9 are used.
+                Each number is used at most once.
+            Return a list of all possible valid combinations. The list
+            must not contain the same combination twice, and the combinations
+            may be returned in any order.
+     */
 
+    private void helper2(int k , int n, List<List<Integer>> result, int num, int sum, List<Integer> tempList){
+        if(k == 0 || sum > n){
+            return;
+        }
+        else{
+            for(int x = num; x <= 9; x++){
+                tempList.add(x);
+                if(k == 1 && (sum + x == n)){
+                    List<Integer> temp = new ArrayList<>(tempList);
+                    result.add(temp);
+                }
+                else{
+                    helper2(k - 1, n, result, x + 1, sum + x, tempList);
+                }
+                tempList.removeLast();
+            }
+            return;
+        }
+    }
+
+    public List<List<Integer>> combinationSum3(int k, int n) {
+        List<List<Integer>> result = new ArrayList<>();
+        helper2(k, n, result, 1, 0, new ArrayList<Integer>());
+        return result;
+    }
+
+    public static void main(String[] args){
+        ArrayList<Integer> al1 = new ArrayList<>();
+        List<Integer> l = (List<Integer>) al1.clone();
     }
 }
