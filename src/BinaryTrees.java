@@ -32,4 +32,40 @@ public class BinaryTrees {
         return root;
     }
 
+    /*
+            Given a Binary Tree. Check for the Sum Tree for every node
+            except the leaf node. Return true if it is a Sum Tree
+            otherwise, return false. A SumTree is a Binary Tree where
+            the value of a node is equal to the sum of the nodes present
+            in its left subtree and right subtree. An empty tree is also
+            a Sum Tree as the sum of an empty tree can be considered to
+            be 0. A leaf node is also considered a Sum Tree.
+     */
+
+    private int helper1(Node root){
+        if(root == null){
+            return 0;
+        }
+        if(root.left == null && root.right == null){
+            return root.data;
+        }
+        else{
+            int left = helper1(root.left);
+            int right = helper1(root.right);
+            if(right + left == root.data){
+                return left + right + root.data;
+            }
+            return -1;
+        }
+    }
+
+    boolean isSumTree(Node root) {
+        return helper1(root) - root.data == root.data;
+    }
+
+
+    public static void main(String[] args) {
+
+    }
+
 }
