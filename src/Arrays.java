@@ -1,5 +1,4 @@
-
-
+import java.util.*;
 
 public class Arrays {
 
@@ -59,6 +58,114 @@ public class Arrays {
                 }
             }
             return digits;
+        }
+    }
+
+    /*
+            Given an integer array nums, move all 0's to the end of it while
+            maintaining the relative order of the non-zero elements. Note that
+            you must do this in-place without making a copy of the array.
+     */
+
+    public void moveZeroes(int[] nums) {
+        for(int x=0; x<nums.length-1; x++){
+            for(int y=0; y<nums.length-1-x; y++){
+                if(nums[y]==0 && nums[y+1]!=0){
+                    int temp=nums[y];
+                    nums[y]=nums[y+1];
+                    nums[y+1]=temp;
+                }
+            }
+        }
+    }
+
+    /*
+            An array is monotonic if it is either monotone increasing or monotone decreasing.
+            An array nums is monotone increasing if for all i <= j, nums[i] <= nums[j].
+            An array nums is monotone decreasing if for all i <= j, nums[i] >= nums[j].
+            Given an integer array nums, return true if the given array is monotonic,
+            or false otherwise.
+     */
+
+    public boolean isMonotonic(int[] nums) {
+        if(nums.length == 1){
+            return true;
+        }
+        else{
+            boolean isIncrease = false;
+            boolean notStarted = true;
+            boolean result = true;
+            for(int x = 0; x < nums.length - 1; x++){
+                if(x == 0 || notStarted){
+                    if(nums[x] < nums[x + 1]){
+                        isIncrease = true;
+                        notStarted = false;
+                        continue;
+                    }
+                    else if(nums[x] > nums[x + 1]){
+                        notStarted = false;
+                        continue;
+                    }
+                }
+                else{
+                    if(isIncrease){
+                        if(nums[x] > nums[x + 1]){
+                            result = false;
+                            break;
+                        }
+                    }
+                    else{
+                        if(nums[x] < nums[x + 1]){
+                            result = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+    }
+
+    /*
+            Given an m x n integer matrix 'matrix', if an element is 0,
+            set its entire row and column to 0's. You must do it in place.
+     */
+
+    private static class Info{          // part 1.
+        int i;
+        int j;
+        public Info(int i, int j){
+            this.i = i;
+            this.j = j;
+        }
+    }
+
+    public void setZeroes(int[][] matrix) {     // part 2.
+        int m = matrix[0].length;
+        int n = matrix.length;
+        if(m == 1 && n == 1){
+            return;
+        }
+        else{
+            ArrayList<Info> grids = new ArrayList<>();
+            for(int i = 0; i < n; i++){
+                for(int j = 0; j < m; j++){
+                    if(matrix[i][j] == 0){
+                        grids.add(new Info(i, j));
+                    }
+                }
+            }
+            while(!grids.isEmpty()){
+                Info temp = grids.removeFirst();
+                // zero the row.
+                for(int j = 0; j < m; j++){
+                    matrix[temp.i][j] = 0;
+                }
+                // zero the column.
+                for(int i = 0; i < n; i++){
+                    matrix[i][temp.j] = 0;
+                }
+            }
         }
     }
 
