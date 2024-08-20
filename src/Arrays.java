@@ -169,6 +169,48 @@ public class Arrays {
         }
     }
 
+    /*
+            You are given an m x n integer matrix 'matrix' with the following two properties:
+            Each row is sorted in non-decreasing order.
+            The first integer of each row is greater than the last integer of the previous row.
+            Given an integer target, return true if target is in matrix or false otherwise.
+     */
+
+    public boolean searchMatrix(int[][] matrix, int target) {
+        int n = matrix.length;
+        int m = matrix[0].length;
+        if(m == 1 && n == 1){
+            if(matrix[0][0] == target){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else{
+            int i = 0, j = 0;
+            while(i < n && j < m){
+                if(matrix[i][j] == target){
+                    return true;
+                }
+                else{
+                    if(target == matrix[i][m - 1]){
+                        return true;
+                    }
+                    else{
+                        if(target > matrix[i][m - 1]){
+                            i++;
+                            j = 0;
+                        }
+                        else{
+                            j++;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
     public static void main(String[] args) {
 
