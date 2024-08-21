@@ -42,7 +42,7 @@ public class BinaryTrees {
             be 0. A leaf node is also considered a Sum Tree.
      */
 
-    private int helper1(Node root){
+    private int helper1(Node root){     // part 1.
         if(root == null){
             return 0;
         }
@@ -59,9 +59,48 @@ public class BinaryTrees {
         }
     }
 
-    boolean isSumTree(Node root) {
+    boolean isSumTree(Node root) {      // part 2.
         return helper1(root) - root.data == root.data;
     }
+
+    /*
+            You are given an integer array nums with no duplicates. A maximum binary
+            tree can be built recursively from nums using the following algorithm:
+            1. Create a root node whose value is the maximum value in nums.
+            2. Recursively build the left subtree on the subarray prefix to the left of the maximum value.
+            3. Recursively build the right subtree on the subarray suffix to the right of the maximum value.
+            Return the maximum binary tree built from nums.
+     */
+
+    private int findMaxIdx(int[] nums, int start, int end){
+        int maxIdx = start;
+        for(int x = start; x < end; x++){
+            if(nums[maxIdx] <= nums[x]){
+                maxIdx = x;
+            }
+        }
+        return maxIdx;
+    }
+
+    private Node helper(int[] nums, int start, int end){
+        if(start >= end){
+            return null;
+        }
+        else{
+            int maxIdx = findMaxIdx(nums, start, end);
+            Node root = new Node(nums[maxIdx]);
+            root.left = helper(nums, start, maxIdx);
+            root.right = helper(nums, maxIdx + 1, end);
+            return root;
+        }
+    }
+
+    public Node constructMaximumBinaryTree(int[] nums) {
+        return helper(nums, 0, nums.length);
+    }
+    
+    
+    
 
 
     public static void main(String[] args) {
