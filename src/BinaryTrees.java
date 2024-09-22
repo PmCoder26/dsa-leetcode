@@ -98,13 +98,86 @@ public class BinaryTrees {
     public Node constructMaximumBinaryTree(int[] nums) {
         return helper(nums, 0, nums.length);
     }
-    
-    
-    
 
+    /*
+            Given the root of a binary tree, return the sum of every tree node's tilt. The tilt of a tree node is the
+            absolute difference between the sum of all left subtree node values and all right subtree node values.
+            If a node does not have a left child, then the sum of the left subtree node values is treated as 0. The
+            rule is similar if the node does not have a right child.
 
-    public static void main(String[] args) {
+            Input: root = [4,2,9,3,5,null,7]
+            Output: 15
+            Explanation:
+            Tilt of node 3 : |0-0| = 0 (no children)
+            Tilt of node 5 : |0-0| = 0 (no children)
+            Tilt of node 7 : |0-0| = 0 (no children)
+            Tilt of node 2 : |3-5| = 2 (left subtree is just left child, so sum is 3; right subtree is just right child, so sum is 5)
+            Tilt of node 9 : |0-7| = 7 (no left child, so sum is 0; right subtree is just right child, so sum is 7)
+            Tilt of node 4 : |(3+5+2)-(9+7)| = |10-16| = 6 (left subtree values are 3, 5, and 2, which sums to 10;
+                                right subtree values are 9 and 7, which sums to 16)
+            Sum of every tilt : 0 + 0 + 0 + 2 + 7 + 6 = 15
+     */
 
+    private class Info{
+        public int netSum = 0;
     }
+
+    private int helper(Node root, Info i){
+        if(root == null){
+            return 0;
+        }
+        else{
+            int left = helper(root.left, i);
+            int right = helper(root.right, i);
+            i.netSum += Math.abs(left - right);
+            return left + right + root.data;
+        }
+    }
+
+    public int findTilt(Node root) {
+        Info i = new Info();
+        helper(root, i);
+        return i.netSum;
+    }
+    
+
+    /*
+    Given the root node of a binary tree, your task is to create a string representation of the tree following a specific
+    set of formatting rules. The representation should be based on a preorder traversal of the binary tree and must adhere
+    to the following guidelines:
+    Node Representation: Each node in the tree should be represented by its integer value.
+    Parentheses for Children: If a node has at least one child (either left or right), its children should be represented
+        inside parentheses.
+    Specifically: If a node has a left child, the value of the left child should be enclosed in
+        parentheses immediately following the node's value. If a node has a right child, the value of the right child should
+        also be enclosed in parentheses. The parentheses for the right child should follow those of the left child.
+    Omitting Empty Parentheses: Any empty parentheses pairs (i.e., ()) should be omitted from the final string
+        representation of the tree, with one specific exception: when a node has a right child but no left child. In such cases,
+        you must include an empty pair of parentheses to indicate the absence of the left child. This ensures that the one-to-one
+        mapping between the string representation and the original binary tree structure is maintained.
+     */
+
+    public String tree2str(Node root) {
+        if (root == null) {
+            return "";
+        } else {
+            String left = tree2str(root.left);
+            String right = tree2str(root.right);
+            if (left.equals("") && !right.equals("")) {
+                left = "()";
+            } else if (!left.equals("")) {
+                left = "(" + left + ")";
+            }
+            if (!right.equals("")) {
+                right = "(" + right + ")";
+            }
+            return Integer.toString(root.data) + left + right;
+        }
+    }
+
+
+
+
+    public static void main(String[] args) {}
 
 }
