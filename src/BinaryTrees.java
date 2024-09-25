@@ -1,4 +1,5 @@
-
+import java.math.BigInteger;
+import java.util.*;
 
 public class BinaryTrees {
 
@@ -175,9 +176,101 @@ public class BinaryTrees {
         }
     }
 
+    /*
+         Given the root of a binary tree and an integer targetSum, return all root-to-leaf paths where the sum of the
+         node values in the path equals targetSum. Each path should be returned as a list of the node values, not node
+         references.
+         A root-to-leaf path is a path starting from the root and ending at any leaf node. A leaf is a node with no children.
+
+         Input: root = [5,4,8,11,null,13,4,7,2,null,null,5,1], targetSum = 22
+         Output: [[5,4,11,2],[5,8,4,5]]
+         Explanation: There are two paths whose sum equals targetSum:
+             5 + 4 + 11 + 2 = 22
+             5 + 8 + 4 + 5 = 22
+     */
+    private void helper(Node root, int target, int sum, List<Integer> list, List<List<Integer>> result){
+        if(root == null){
+            return;
+        }
+        if(root.left == null && root.right == null){
+            if(sum + root.data == target){
+                List<Integer> temp = (List<Integer>) ((ArrayList<Integer>) list).clone();
+                temp.add(root.data);
+                result.add(temp);
+            }
+        }
+        else{
+            List<Integer> temp = (List<Integer>) ((ArrayList<Integer>) list).clone();
+            temp.add(root.data);
+            sum+= root.data;
+            helper(root.left, target, sum, temp, result);
+            helper(root.right, target, sum, temp, result);
+        }
+    }
+
+    public List<List<Integer>> pathSum2(Node root, int targetSum) {
+        if(root == null){
+            return new ArrayList();
+        }
+        else{
+            List<List<Integer>> result = new ArrayList();
+            List<Integer> list = new ArrayList();
+            helper(root, targetSum, 0, list, result);
+            return result;
+        }
+    }
+
+    /*
+            Given the root of a binary tree, return the bottom-up level order traversal of its nodes' values.
+            (i.e., from left to right, level by level from leaf to root).
+
+            Input: root = [3,9,20,null,null,15,7]
+            Output: [[15,7],[9,20],[3]]
+     */
+
+    private List<List<Integer>> levelOrderBottom(Node root) {
+        if(root == null){
+            return new ArrayList();
+        }
+        else{
+            Queue<Node> nodeQ = new LinkedList<>();
+            List<List<Integer>> result = new ArrayList<>();
+            List<Integer> temp = new ArrayList<>();
+            nodeQ.add(root);
+            nodeQ.add(null);
+            while(!nodeQ.isEmpty()){
+                Node curr = nodeQ.remove();
+                if(curr == null){
+                    if(nodeQ.isEmpty()){
+                        result.add(temp);
+                        break;
+                    }
+                    else{
+                        nodeQ.add(null);
+                        result.add(temp);
+                        temp = new ArrayList();
+                    }
+                }
+                else{
+                    temp.add(curr.data);
+                    if(curr.left != null){
+                        nodeQ.add(curr.left);
+                    }
+                    if(curr.right != null){
+                        nodeQ.add(curr.right);
+                    }
+                }
+            }
+            Collections.reverse(result);
+            return result;
+        }
+    }
 
 
 
-    public static void main(String[] args) {}
+
+    public static void main(String[] args) {
+
+    }
 
 }
