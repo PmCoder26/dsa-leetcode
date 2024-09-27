@@ -212,6 +212,50 @@ public class Arrays {
         return false;
     }
 
+    /*
+        You are given an array of integers and an integer k. Your task is to rotate the array to the right by k steps,
+        where k is a non-negative integer. This means that after each step, the last element of the array is moved to
+        the front.You are required to implement this operation in-place, meaning that the rotation should be done without
+        using any additional arrays.
+        Input Format:
+            The first line contains the integer, n (the size of the array).
+            The next line contains the integer k (the number of rotations).
+            The next n lines contain the elements of the array.
+        Constraints:
+            1 ≤ n ≤ 10 The value of k can be greater than n. In such cases, perform k % n rotations.
+        Output Format:
+        Return a space-separated string of the rotated array elements.
+     */
+
+    private static void rotateArr(int[] nums, int k){
+        if(k == 0 || k >= nums.length){
+            return;
+        }
+        else{
+            // if unable to understand the logic then dry-run it.
+            int n = nums.length;
+            int netK = k % n;
+            int i = 0, j = n - netK;
+            while(j < n){       // interchange the last netK integers with the first netK integers.
+                int temp = nums[i];
+                nums[i] = nums[j];
+                nums[j] = temp;
+                i++;
+                j++;
+            }
+            for(int x = 0; x < (n - netK)/2; x++){      // reverse the array portion(after the current netK numbers)
+                int temp = nums[netK + x];
+                nums[netK + x] = nums[n - 1 - x];
+                nums[n - 1 - x] = temp;
+            }
+            for(int x = 0; x < netK / 2; x++){          // reverse the array portion(after the current netK numbers) of size of netK.
+                int temp = nums[netK + x];
+                nums[netK + x] = nums[netK + netK - 1 - x];
+                nums[netK + netK - 1 - x] = temp;
+            }
+        }
+    }
+
     public static void main(String[] args) {
 
     }
