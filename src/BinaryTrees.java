@@ -293,7 +293,7 @@ public class BinaryTrees {
         }
     }
 
-    public void flatten(Node root) {
+    public void x(Node root) {
         if(root == null || (root.left == null && root.right == null)){
             return;
         }
@@ -305,6 +305,39 @@ public class BinaryTrees {
         }
     }
 
+    /*
+            Given the root of a Binary Search Tree (BST), convert it to a Greater Tree such that every key of the
+            original BST is changed to the original key plus the sum of all keys greater than the original key in BST.
+
+            Input: root = [4,1,6,0,2,5,7,null,null,null,3,null,null,null,8]
+            Output: [30,36,21,36,35,26,15,null,null,null,33,null,null,null,8]
+     */
+
+    private class Sum{
+        int sum;
+        Sum(int sum){
+            this.sum = sum;
+        }
+    }
+
+    private void helper(Node root, Sum s){
+        if(root != null){
+            helper(root.right, s);
+            s.sum += root.data;
+            root.data = s.sum;
+            helper(root.left, s);
+        }
+    }
+
+    private Node convertBST(Node root) {
+        if(root == null){
+            return root;
+        }
+        else{
+            helper(root, new Sum(0));
+            return root;
+        }
+    }
 
 
     public static void main(String[] args) {
