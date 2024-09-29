@@ -256,6 +256,62 @@ public class Arrays {
         }
     }
 
+    /*
+            You are given an array of integers, nums. Your task is to find 3 numbers whose product is the maximum and return the product.
+            Input Format:
+                The first line contains the integer, n (the size of the array). The next n lines contain the elements of the array.
+            Constraints
+                1 ≤ n ≤ 10⁴ −10⁹ ≤ nums[i] ≤ 10⁹
+            Output Format:
+                Return a single number, the maximum product.
+     */
+
+    private static void findMaxProduct(){
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int[] nums = new int[n];
+        for(int x = 0; x < n; x++){
+            nums[x] = sc.nextInt();
+        }
+        int product = 1;
+        if(n <= 3){
+            int x = 0;
+            while(x < n){
+                product *= nums[x++];
+            }
+        }
+        else{
+            int x = 3;
+            int n1 = nums[0];
+            int n2 = nums[1];
+            int n3 = nums[2];
+            product = n1 * n2 * n3;
+            while(x < n){
+                int p1 = n2 * n3 * nums[x];
+                int p2 = n1 * n3 * nums[x];
+                int p3 = n1 * n2 * nums[x];
+                int temp = Math.max(p1, Math.max(p2, p3));
+                if(temp > product){
+                    if(temp == p1){
+                        n1 = n2;
+                        n2 = n3;
+                        n3 = nums[x];
+                    }
+                    else if(temp == p2){
+                        n2 = n3;
+                        n3 = nums[x];
+                    }
+                    else{
+                        n3 = nums[x];
+                    }
+                    product = temp;
+                }
+                x++;
+            }
+        }
+        System.out.println(product);
+    }
+
     public static void main(String[] args) {
 
     }
