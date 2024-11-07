@@ -1,5 +1,4 @@
-
-
+import java.util.List;
 
 public class DynamicProgramming {
 
@@ -155,6 +154,60 @@ public class DynamicProgramming {
             tabs[x] = -1;
         }
         return helper(nums, tabs, 0);
+    }
+
+    /*
+            Given a triangle array, return the minimum path sum from top to bottom. For each step, you may move to an
+            adjacent number of the row below. More formally, if you are on index i on the current row, you may move to
+            either index i or index i + 1 on the next row.
+
+            Example 1:
+                Input: triangle = [[2],[3,4],[6,5,7],[4,1,8,3]]
+                Output: 11
+                Explanation: The triangle looks like:
+                   2
+                  3 4
+                 6 5 7
+                4 1 8 3
+                The minimum path sum from top to bottom is 2 + 3 + 5 + 1 = 11 (underlined above).
+            Example 2:
+                Input: triangle = [[-10]]
+                Output: -10
+     */
+
+    private int helper(List<List<Integer>> triangle, int[][] tabs, int x, int y){
+        if(x == triangle.size() - 1 && y == triangle.get(x).size() - 1){
+            return tabs[x][y] = triangle.get(x).get(y);
+        }
+        if(x >= triangle.size() || y >= triangle.get(x).size()){
+            return 0;
+        }
+        if(tabs[x][y] != -1){
+            return tabs[x][y];
+        }
+        else{
+            int minSum = Integer.MAX_VALUE;
+            for(int i = y; i < y + 2 && i < triangle.get(x).size(); i++){
+                minSum = Math.min(minSum, triangle.get(x).get(i) + helper(triangle, tabs, x + 1, i));
+            }
+            return tabs[x][y] = minSum;
+        }
+    }
+
+    public int minimumTotal(List<List<Integer>> triangle) {
+        if(triangle.size() == 1){
+            return triangle.get(0).get(0);
+        }
+        else{
+            int[][] tabs = new int[triangle.size()][triangle.get(triangle.size() - 1).size()];
+            for(int x = 0; x < triangle.size(); x++){
+                int s = triangle.get(x).size();
+                for(int y = 0; y < s; y++){
+                    tabs[x][y] = -1;
+                }
+            }
+            return helper(triangle, tabs, 0, 0);
+        }
     }
 
     public static void main(String[] args) {
