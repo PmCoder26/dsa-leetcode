@@ -230,7 +230,7 @@ public class LinkedLists {
 
     /*
             You are given the head of a linked list.
-            Remove every node which has a node with a greater value anywhere to the right side of it.
+            Remove every node that has a node with a greater value anywhere to the right side of it.
             Return the head of the modified linked list.
      */
 
@@ -269,6 +269,38 @@ public class LinkedLists {
             }
             return ans;
         }
+    }
+
+    /*
+            You are given two linked lists: list1 and list2 of sizes n and m respectively.
+            Remove list1's nodes from the ath node to the bth node, and put list2 in their place.
+                Input: list1 = [10,1,13,6,9,5], a = 3, b = 4, list2 = [1000000,1000001,1000002]
+                Output: [10,1,13,1000000,1000001,1000002,5]
+                Explanation: We remove the nodes 3 and 4 and put the entire list2 in their place.
+     */
+
+    public ListNode mergeInBetween(ListNode list1, int a, int b, ListNode list2) {
+        int a1 = a - 1;
+        int b1 = b - 1;
+        int x = 0;
+        ListNode curr = list1;
+        ListNode temp = null;
+        while(x < a1) {
+            curr = curr.next;
+            x++;
+        }
+        temp = curr.next;
+        curr.next = list2;
+        while(x < b1) {
+            temp = temp.next;
+            x++;
+        }
+        while(curr.next != null) {
+            curr = curr.next;
+        }
+        curr.next = temp.next;
+        temp.next = null;
+        return list1;
     }
 
     public static void main(String[] args) {
