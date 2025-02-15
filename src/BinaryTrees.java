@@ -1,5 +1,6 @@
 import java.math.BigInteger;
 import java.util.*;
+import java.util.Arrays;
 
 public class BinaryTrees {
 
@@ -37,7 +38,7 @@ public class BinaryTrees {
             Given a Binary Tree. Check for the Sum Tree for every node
             except the leaf node. Return true if it is a Sum Tree
             otherwise, return false. A SumTree is a Binary Tree where
-            the value of a node is equal to the sum of the nodes present
+            the dataue of a node is equal to the sum of the nodes present
             in its left subtree and right subtree. An empty tree is also
             a Sum Tree as the sum of an empty tree can be considered to
             be 0. A leaf node is also considered a Sum Tree.
@@ -67,9 +68,9 @@ public class BinaryTrees {
     /*
             You are given an integer array nums with no duplicates. A maximum binary
             tree can be built recursively from nums using the following algorithm:
-            1. Create a root node whose value is the maximum value in nums.
-            2. Recursively build the left subtree on the subarray prefix to the left of the maximum value.
-            3. Recursively build the right subtree on the subarray suffix to the right of the maximum value.
+            1. Create a root node whose dataue is the maximum dataue in nums.
+            2. Recursively build the left subtree on the subarray prefix to the left of the maximum dataue.
+            3. Recursively build the right subtree on the subarray suffix to the right of the maximum dataue.
             Return the maximum binary tree built from nums.
      */
 
@@ -102,8 +103,8 @@ public class BinaryTrees {
 
     /*
             Given the root of a binary tree, return the sum of every tree node's tilt. The tilt of a tree node is the
-            absolute difference between the sum of all left subtree node values and all right subtree node values.
-            If a node does not have a left child, then the sum of the left subtree node values is treated as 0. The
+            absolute difference between the sum of all left subtree node dataues and all right subtree node dataues.
+            If a node does not have a left child, then the sum of the left subtree node dataues is treated as 0. The
             rule is similar if the node does not have a right child.
 
             Input: root = [4,2,9,3,5,null,7]
@@ -114,8 +115,8 @@ public class BinaryTrees {
             Tilt of node 7 : |0-0| = 0 (no children)
             Tilt of node 2 : |3-5| = 2 (left subtree is just left child, so sum is 3; right subtree is just right child, so sum is 5)
             Tilt of node 9 : |0-7| = 7 (no left child, so sum is 0; right subtree is just right child, so sum is 7)
-            Tilt of node 4 : |(3+5+2)-(9+7)| = |10-16| = 6 (left subtree values are 3, 5, and 2, which sums to 10;
-                                right subtree values are 9 and 7, which sums to 16)
+            Tilt of node 4 : |(3+5+2)-(9+7)| = |10-16| = 6 (left subtree dataues are 3, 5, and 2, which sums to 10;
+                                right subtree dataues are 9 and 7, which sums to 16)
             Sum of every tilt : 0 + 0 + 0 + 2 + 7 + 6 = 15
      */
 
@@ -146,11 +147,11 @@ public class BinaryTrees {
     Given the root node of a binary tree, your task is to create a string representation of the tree following a specific
     set of formatting rules. The representation should be based on a preorder traversal of the binary tree and must adhere
     to the following guidelines:
-    Node Representation: Each node in the tree should be represented by its integer value.
+    Node Representation: Each node in the tree should be represented by its integer dataue.
     Parentheses for Children: If a node has at least one child (either left or right), its children should be represented
         inside parentheses.
-    Specifically: If a node has a left child, the value of the left child should be enclosed in
-        parentheses immediately following the node's value. If a node has a right child, the value of the right child should
+    Specifically: If a node has a left child, the dataue of the left child should be enclosed in
+        parentheses immediately following the node's dataue. If a node has a right child, the dataue of the right child should
         also be enclosed in parentheses. The parentheses for the right child should follow those of the left child.
     Omitting Empty Parentheses: Any empty parentheses pairs (i.e., ()) should be omitted from the final string
         representation of the tree, with one specific exception: when a node has a right child but no left child. In such cases,
@@ -178,7 +179,7 @@ public class BinaryTrees {
 
     /*
          Given the root of a binary tree and an integer targetSum, return all root-to-leaf paths where the sum of the
-         node values in the path equals targetSum. Each path should be returned as a list of the node values, not node
+         node dataues in the path equals targetSum. Each path should be returned as a list of the node dataues, not node
          references.
          A root-to-leaf path is a path starting from the root and ending at any leaf node. A leaf is a node with no children.
 
@@ -221,7 +222,7 @@ public class BinaryTrees {
     }
 
     /*
-            Given the root of a binary tree, return the bottom-up level order traversal of its nodes' values.
+            Given the root of a binary tree, return the bottom-up level order traversal of its nodes' dataues.
             (i.e., from left to right, level by level from leaf to root).
 
             Input: root = [3,9,20,null,null,15,7]
@@ -381,7 +382,7 @@ public class BinaryTrees {
     }
 
     /*
-            Given the root of a binary tree, return the zigzag level order traversal of its nodes' values.
+            Given the root of a binary tree, return the zigzag level order traversal of its nodes' dataues.
             (i.e., from left to right, then right to left for the next level and alternate between).
 
             Example 1:
@@ -432,10 +433,60 @@ public class BinaryTrees {
         return ans;
     }
 
+    /*
+
+     */
+
+    private int childFinder(HashMap<Integer, Integer> pre, List<Integer> inord, int start, int end) {
+        int idx = Integer.MAX_VALUE;
+        int minIndex = -1;
+        for (int x = start; x <= end; x++) {
+            int preIndex = pre.get(inord.get(x));
+            if (idx > preIndex) {
+                idx = preIndex;
+                minIndex = x;
+            }
+        }
+        return inord.get(minIndex);
+    }
+
+    private Node helper(HashMap<Integer, Integer> pre, List<Integer> inord, int start, int end) {
+        if(start == end) {
+            return new Node(inord.get(start));
+        }
+        if(start > end) {
+            return null;
+        }
+        Node newNode = new Node(childFinder(pre, inord, start, end));
+        int rootIdx = inord.indexOf(newNode.data);
+        newNode.left = helper(pre, inord, start, rootIdx - 1);
+        newNode.right = helper(pre, inord, rootIdx + 1, end);
+        return newNode;
+    }
+
+    public Node buildTree(int[] preorder, int[] inorder) {
+        if(preorder[0] == -1) {
+            return new Node(-1);
+        }
+        HashMap<Integer, Integer> pre = new HashMap<>();
+        List<Integer> inord = Arrays.stream(inorder).boxed().toList();
+        for(int x = 0; x < preorder.length; x++) {
+            pre.put(preorder[x], x);
+        }
+        Node root = new Node(preorder[0]);
+        int idx = inord.indexOf(preorder[0]);
+        root.left = helper(pre, inord, 0, idx - 1);
+        root.right = helper(pre, inord, idx + 1, inord.size() - 1);
+        return root;
+    }
+
     public static void main(String[] args) {
         Node root1 = new Node(1);
         Node root2 = new Node(2);
         System.out.println(root2.equals(root1));
+        List<Info> i = new ArrayList<>();
+        HashSet<Integer> h = new HashSet<>();
+        int[] arr = new int[10];
     }
 
 }
