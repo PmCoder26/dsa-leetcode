@@ -1,10 +1,11 @@
+import java.util.HashSet;
 import java.util.Stack;
 
 public class LinkedLists {
-    private static class ListNode{
+    private static class Node{
         int data;
-        ListNode next;
-        public ListNode(int data){
+        Node next;
+        public Node(int data){
             this.data = data;
             next = null;
         }
@@ -18,15 +19,15 @@ public class LinkedLists {
              linked lists have no intersection at all, return null.
         */
 
-    public static ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+    public static Node getIntersectionNode(Node headA, Node headB) {
         if(headA == headB){
             return headA;
         }
         else{
             int lenA = 0;
             int lenB = 0;
-            ListNode a = headA;
-            ListNode b = headB;
+            Node a = headA;
+            Node b = headB;
             while(a != null){
                 lenA++;
                 a = a.next;
@@ -69,7 +70,7 @@ public class LinkedLists {
         Do not modify the linked list.
      */
 
-    public ListNode detectCycle(ListNode head) {
+    public Node detectCycle(Node head) {
         if(head == null || head.next == null){
             return null;
         }
@@ -79,13 +80,13 @@ public class LinkedLists {
                     return head;
                 }
             }
-            ListNode slow = head;
-            ListNode fast = head;
+            Node slow = head;
+            Node fast = head;
             while(fast != null && fast.next != null){
                 slow = slow.next;
                 fast = fast.next.next;
                 if(slow == fast){
-                    ListNode curr = head;
+                    Node curr = head;
                     while(curr != fast){
                         fast = fast.next;
                         curr = curr.next;
@@ -108,15 +109,15 @@ public class LinkedLists {
         or equal to parts occurring later. Return an array of the k parts.
      */
 
-    public ListNode[] splitListToParts(ListNode head, int k) {
-        ListNode[] result = new ListNode[k];
+    public Node[] splitListToParts(Node head, int k) {
+        Node[] result = new Node[k];
 
         if(head == null){
             return result;
         }
         else{
             int listSize = 0;
-            ListNode curr = head;
+            Node curr = head;
             // calculating list size;
             while(curr != null){
                 listSize++;
@@ -127,7 +128,7 @@ public class LinkedLists {
             if(listSize <= k){
                 int i=0;
                 while(curr != null){
-                    ListNode temp = curr.next;
+                    Node temp = curr.next;
                     curr.next = null;
                     result[i++] = curr;
                     curr = temp;
@@ -139,7 +140,7 @@ public class LinkedLists {
             // if the size of the linked list is greater.
             // hence we need to partition the list.
             else{
-                ListNode tempPtr = curr;
+                Node tempPtr = curr;
                 int rem = listSize % k;
                 int partSize = listSize / k;
                 int i = 0;
@@ -154,7 +155,7 @@ public class LinkedLists {
                         tempPtr = tempPtr.next;
                         rem--;
                     }
-                    ListNode temp = tempPtr.next;
+                    Node temp = tempPtr.next;
                     tempPtr.next = null;
                     result[i++] = curr;
                     curr = temp;
@@ -172,15 +173,15 @@ public class LinkedLists {
             Reorder the list to be on the following form:
             L0 → Ln → L1 → Ln - 1 → L2 → Ln - 2 → …
 
-            You may not modify the values in the list's nodes. Only nodes themselves may be changed.
+            You may not modify the dataues in the list's nodes. Only nodes themselves may be changed.
      */
-    private ListNode getMid(ListNode head){                 // part 1.
+    private Node getMid(Node head){                 // part 1.
         if(head == null){
             return head;
         }
         else{
-            ListNode slow = head;
-            ListNode fast = head.next;
+            Node slow = head;
+            Node fast = head.next;
             while(fast != null && fast.next != null){
                 slow = slow.next;
                 fast = fast.next.next;
@@ -189,14 +190,14 @@ public class LinkedLists {
         }
     }
 
-    private ListNode reverse(ListNode head){                // part 2.
+    private Node reverse(Node head){                // part 2.
         if(head == null){
             return head;
         }
         else{
-            ListNode prev = null;
+            Node prev = null;
             while(head != null){
-                ListNode temp = head.next;
+                Node temp = head.next;
                 head.next = prev;
                 prev = head;
                 head = temp;
@@ -205,17 +206,17 @@ public class LinkedLists {
         }
     }
 
-    public void reorderList(ListNode head) {                // part 3.
+    public void reorderList(Node head) {                // part 3.
         if(head == null || head.next == null){
             return;
         }
         else{
-            ListNode curr = getMid(head);
-            ListNode part2 = reverse(curr.next);
+            Node curr = getMid(head);
+            Node part2 = reverse(curr.next);
             curr.next = null;
             curr = head;
-            ListNode currNext = curr;
-            ListNode part2Next = part2;
+            Node currNext = curr;
+            Node part2Next = part2;
             while(part2 != null){
                 currNext = currNext.next;
                 part2Next = part2.next;
@@ -230,11 +231,11 @@ public class LinkedLists {
 
     /*
             You are given the head of a linked list.
-            Remove every node that has a node with a greater value anywhere to the right side of it.
+            Remove every node that has a node with a greater dataue anywhere to the right side of it.
             Return the head of the modified linked list.
      */
 
-    private ListNode add(ListNode head, ListNode curr){     // part 1
+    private Node add(Node head, Node curr){     // part 1
         if(head == null){
             return curr;
         }
@@ -245,20 +246,20 @@ public class LinkedLists {
         }
     }
 
-    public ListNode removeNodes(ListNode head) {        // part 2
+    public Node removeNodes(Node head) {        // part 2
         if(head == null || head.next == null){
             return head;
         }
         else{
-            ListNode ans = null;
-            Stack<ListNode> st = new Stack();
+            Node ans = null;
+            Stack<Node> st = new Stack();
             int max = Integer.MIN_VALUE;
             while(head != null){
                 st.push(head);
                 head = head.next;
             }
             while(!st.isEmpty()){
-                ListNode curr = st.pop();
+                Node curr = st.pop();
                 if(curr.data >= max){
                     ans = add(ans, curr);
                     max = curr.data;
@@ -279,12 +280,12 @@ public class LinkedLists {
                 Explanation: We remove the nodes 3 and 4 and put the entire list2 in their place.
      */
 
-    public ListNode mergeInBetween(ListNode list1, int a, int b, ListNode list2) {
+    public Node mergeInBetween(Node list1, int a, int b, Node list2) {
         int a1 = a - 1;
         int b1 = b - 1;
         int x = 0;
-        ListNode curr = list1;
-        ListNode temp = null;
+        Node curr = list1;
+        Node temp = null;
         while(x < a1) {
             curr = curr.next;
             x++;
@@ -301,6 +302,34 @@ public class LinkedLists {
         curr.next = temp.next;
         temp.next = null;
         return list1;
+    }
+
+    public Node modifiedList(int[] nums, Node head) {
+        HashSet<Integer> hs = new HashSet<>();
+        for (int num : nums) {
+            hs.add(num);
+        }
+        Node curr = head;
+        Node ansStart = null;
+        Node ansNext = null;
+        boolean start = true;
+        while(curr != null) {
+            Node temp = curr.next;
+            curr.next = null;
+            if(!hs.contains(curr.data)) {
+                if(start) {
+                    start = false;
+                    ansStart = curr;
+                    ansNext = ansStart;
+                }
+                else {
+                    ansNext.next = curr;
+                    ansNext = ansNext.next;
+                }
+            }
+            curr = temp;
+        }
+        return ansStart;
     }
 
     public static void main(String[] args) {

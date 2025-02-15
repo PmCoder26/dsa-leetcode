@@ -339,6 +339,99 @@ public class BinaryTrees {
         }
     }
 
+    /*
+            You are given the root of a binary tree containing digits from 0 to 9 only.
+            Each root-to-leaf path in the tree represents a number.
+            For example, root-to-leaf path 1 -> 2 -> 3 represents the number 123.
+            Return the total sum of all root-to-leaf numbers.
+            Test cases are generated so that the answer will fit in a 32-bit integer.
+
+            Input: root = [1,2,3]
+            Output: 25
+            Explanation:
+                The root-to-leaf path 1->2 represents the number 12.
+                The root-to-leaf path 1->3 represents the number 13.
+                Therefore, sum = 12 + 13 = 25
+     */
+
+    static class Info2 {
+        int data;
+        public Info2(int data) {
+            this.data = data;
+        }
+    }
+
+    private static void helper(Node root, int sum, Info2 info) {
+        if(root == null) {
+            return;
+        }
+        if(root.left == null && root.right == null) {
+            info.data += sum * 10 + root.data;
+            return;
+        }
+        helper(root.left, sum * 10 + root.data, info);
+        helper(root.right, sum * 10 + root.data, info);
+        return;
+    }
+
+    public int sumNumbers(Node root) {
+        Info2 info = new Info2(0);
+        helper(root, 0, info);
+        return info.data;
+    }
+
+    /*
+            Given the root of a binary tree, return the zigzag level order traversal of its nodes' values.
+            (i.e., from left to right, then right to left for the next level and alternate between).
+
+            Example 1:
+                Input: root = [3,9,20,null,null,15,7]
+                Output: [[3],[20,9],[15,7]]
+            Example 2:
+                Input: root = [1]
+                Output: [[1]]
+            Example 3:
+                Input: root = []
+                Output: []
+     */
+
+    public List<List<Integer>> zigzagLevelOrder(Node root) {
+        if(root == null) {
+            return new ArrayList<>();
+        }
+        int flag = 0;
+        List<List<Integer>> ans = new ArrayList<>();
+        List<Integer> temp = new ArrayList<>();
+        Queue<Node> q = new LinkedList<>();
+        q.add(root);
+        q.add(null);
+        while(!q.isEmpty()) {
+            Node curr = q.remove();
+            if(curr == null) {
+                if(flag == 0) {
+                    flag = 1;
+                }
+                else {
+                    flag = 0;
+                    Collections.reverse(temp);
+                }
+                if(q.isEmpty()) {
+                    ans.add(temp);
+                    break;
+                }
+                ans.add(temp);
+                temp = new ArrayList<>();
+                q.add(null);
+            }
+            else {
+                temp.add(curr.data);
+                if(curr.left != null) q.add(curr.left);
+                if(curr.right != null) q.add(curr.right);
+            }
+        }
+        return ans;
+    }
+
     public static void main(String[] args) {
         Node root1 = new Node(1);
         Node root2 = new Node(2);
