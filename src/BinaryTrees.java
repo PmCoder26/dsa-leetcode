@@ -1,4 +1,3 @@
-import java.math.BigInteger;
 import java.util.*;
 import java.util.Arrays;
 
@@ -38,7 +37,7 @@ public class BinaryTrees {
             Given a Binary Tree. Check for the Sum Tree for every node
             except the leaf node. Return true if it is a Sum Tree
             otherwise, return false. A SumTree is a Binary Tree where
-            the dataue of a node is equal to the sum of the nodes present
+            the data of a node is equal to the sum of the nodes present
             in its left subtree and right subtree. An empty tree is also
             a Sum Tree as the sum of an empty tree can be considered to
             be 0. A leaf node is also considered a Sum Tree.
@@ -144,19 +143,19 @@ public class BinaryTrees {
     
 
     /*
-    Given the root node of a binary tree, your task is to create a string representation of the tree following a specific
-    set of formatting rules. The representation should be based on a preorder traversal of the binary tree and must adhere
-    to the following guidelines:
-    Node Representation: Each node in the tree should be represented by its integer dataue.
-    Parentheses for Children: If a node has at least one child (either left or right), its children should be represented
-        inside parentheses.
-    Specifically: If a node has a left child, the dataue of the left child should be enclosed in
-        parentheses immediately following the node's dataue. If a node has a right child, the dataue of the right child should
-        also be enclosed in parentheses. The parentheses for the right child should follow those of the left child.
-    Omitting Empty Parentheses: Any empty parentheses pairs (i.e., ()) should be omitted from the final string
-        representation of the tree, with one specific exception: when a node has a right child but no left child. In such cases,
-        you must include an empty pair of parentheses to indicate the absence of the left child. This ensures that the one-to-one
-        mapping between the string representation and the original binary tree structure is maintained.
+            Given the root node of a binary tree, your task is to create a string representation of the tree following a specific
+            set of formatting rules. The representation should be based on a preorder traversal of the binary tree and must adhere
+            to the following guidelines:
+            Node Representation: Each node in the tree should be represented by its integer dataue.
+            Parentheses for Children: If a node has at least one child (either left or right), its children should be represented
+                inside parentheses.
+            Specifically: If a node has a left child, the dataue of the left child should be enclosed in
+                parentheses immediately following the node's dataue. If a node has a right child, the dataue of the right child should
+                also be enclosed in parentheses. The parentheses for the right child should follow those of the left child.
+            Omitting Empty Parentheses: Any empty parentheses pairs (i.e., ()) should be omitted from the final string
+                representation of the tree, with one specific exception: when a node has a right child but no left child. In such cases,
+                you must include an empty pair of parentheses to indicate the absence of the left child. This ensures that the one-to-one
+                mapping between the string representation and the original binary tree structure is maintained.
      */
 
     public String tree2str(Node root) {
@@ -178,16 +177,16 @@ public class BinaryTrees {
     }
 
     /*
-         Given the root of a binary tree and an integer targetSum, return all root-to-leaf paths where the sum of the
-         node dataues in the path equals targetSum. Each path should be returned as a list of the node dataues, not node
-         references.
-         A root-to-leaf path is a path starting from the root and ending at any leaf node. A leaf is a node with no children.
+             Given the root of a binary tree and an integer targetSum, return all root-to-leaf paths where the sum of the
+             node dataues in the path equals targetSum. Each path should be returned as a list of the node dataues, not node
+             references.
+             A root-to-leaf path is a path starting from the root and ending at any leaf node. A leaf is a node with no children.
 
-         Input: root = [5,4,8,11,null,13,4,7,2,null,null,5,1], targetSum = 22
-         Output: [[5,4,11,2],[5,8,4,5]]
-         Explanation: There are two paths whose sum equals targetSum:
-             5 + 4 + 11 + 2 = 22
-             5 + 8 + 4 + 5 = 22
+             Input: root = [5,4,8,11,null,13,4,7,2,null,null,5,1], targetSum = 22
+             Output: [[5,4,11,2],[5,8,4,5]]
+             Explanation: There are two paths whose sum equals targetSum:
+                 5 + 4 + 11 + 2 = 22
+                 5 + 8 + 4 + 5 = 22
      */
     private void helper(Node root, int target, int sum, List<Integer> list, List<List<Integer>> result){
         if(root == null){
@@ -270,7 +269,7 @@ public class BinaryTrees {
     /*
             Given the root of a binary tree, flatten the tree into a "linked list":
             The "linked list" should use the same Node class where the right child pointer points to the next node
-            in the list and the left child pointer is always null.
+            in the list, and the left child pointer is always null.
             The "linked list" should be in the same order as a pre-order traversal of the binary tree.
 
             Input: root = [1,2,5,3,4,null,6]
@@ -541,6 +540,56 @@ public class BinaryTrees {
                 }
             }
             return root;
+        }
+    }
+
+    /*
+            Given the root of a binary tree, return the leftmost value in the last row of the tree.
+
+            Input: root = [2,1,3]
+            Output: 1
+
+            Input: root = [1,2,3,4,null,5,6,null,null,7]
+            Output: 7
+     */
+
+    private static class Info3 extends Info2 {
+        int level;
+        int dist;
+        public Info3() {
+            super(0);
+            level = 0;
+            dist = 0;
+        }
+    }
+
+    private void helper(Node root, int level, int dist, Info3 info, boolean isLeft) {
+        if(root == null) return;
+        if(info.level < level) {
+            info.level = level;
+            info.data = root.data;
+            info.dist = dist;
+        }
+        else if(info.level == level) {
+            if(info.dist > dist && isLeft) {       // isLeft -> for second last test case.
+                info.dist = dist;
+                info.data = root.data;
+            }
+        }
+        helper(root.left, level + 1, dist - 1, info, isLeft);
+        helper(root.right, level + 1, dist + 1, info, isLeft);
+    }
+
+    public int findBottomLeftValue(Node root) {
+        if(root.left == null && root.right == null) {
+            return root.data;
+        }
+        else {
+            Info3 info = new Info3();
+            info.data = root.data;
+            helper(root.left, 1, -1, info, true);
+            helper(root.right, 1, 1, info, false);
+            return info.data;
         }
     }
 
