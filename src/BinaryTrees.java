@@ -544,7 +544,7 @@ public class BinaryTrees {
     }
 
     /*
-            Given the root of a binary tree, return the leftmost value in the last row of the tree.
+            Given the root of a binary tree, return the leftmost dataue in the last row of the tree.
 
             Input: root = [2,1,3]
             Output: 1
@@ -594,34 +594,34 @@ public class BinaryTrees {
     }
 
     /*
-            Given the root of a binary tree and two integers val and depth, add a row of nodes with value val at the given depth depth.
+            Given the root of a binary tree and two integers data and depth, add a row of nodes with dataue data at the given depth depth.
             Note that the root node is at depth 1.
             The adding rule is:
                 Given the integer depth, for each not null tree node cur at the depth depth - 1, create two tree nodes with
-                value val as cur's left subtree root and right subtree root.
+                dataue data as cur's left subtree root and right subtree root.
 
                 cur's original left subtree should be the left subtree of the new left subtree root.
 
                 cur's original right subtree should be the right subtree of the new right subtree root.
 
-                If depth == 1 that means there is no depth depth - 1 at all, then create a tree node with value val as the
+                If depth == 1 that means there is no depth depth - 1 at all, then create a tree node with dataue data as the
                 new root of the whole original tree, and the original tree is the new root's left subtree.
 
             Example 1:
-                Input: root = [4,2,6,3,1,5], val = 1, depth = 2
+                Input: root = [4,2,6,3,1,5], data = 1, depth = 2
                 Output: [4,1,1,2,null,null,6,3,1,5]
 
             Example 2:
-                Input: root = [4,2,null,3,1], val = 1, depth = 3
+                Input: root = [4,2,null,3,1], data = 1, depth = 3
                 Output: [4,2,null,1,1,3,null,null,1]
      */
 
-    public Node addOneRow(Node root, int val, int depth) {
+    public Node addOneRow(Node root, int data, int depth) {
         if(root == null) {
-            return new Node(val);
+            return new Node(data);
         }
         if(depth == 1) {
-            Node newNode = new Node(val);
+            Node newNode = new Node(data);
             newNode.left = root;
             return newNode;
         }
@@ -654,13 +654,64 @@ public class BinaryTrees {
                 Node curr = q.remove();
                 Node left = curr.left;
                 Node right = curr.right;
-                curr.left = new Node(val);
-                curr.right = new Node(val);
+                curr.left = new Node(data);
+                curr.right = new Node(data);
                 curr.left.left = left;
                 curr.right.right = right;
             }
             return root;
         }
+    }
+
+    /*
+            Given the root of a binary search tree and the lowest and highest boundaries as low and high,
+            trim the tree so that all its elements lie in [low, high]. Trimming the tree should not change the
+            relative structure of the elements that will remain in the tree (i.e., any node's descendant should remain
+            a descendant). It can be proven that there is a unique answer.
+            Return the root of the trimmed binary search tree. Note that the root may change depending on the given bounds.
+            node's descendant should remain a descendant). It can be proven that there is a unique answer.
+
+            Return the root of the trimmed binary search tree. Note that the root may change depending on the given bounds.
+            
+            Example 1:
+                Input: root = [1,0,2], low = 1, high = 2
+                Output: [1,null,2]
+            Example 2:
+                Input: root = [3,0,4,null,2,null,null,1], low = 1, high = 3
+                Output: [3,2,null,1]
+     */
+
+    private Node inOrderSucc(Node root, Node sub) {
+        if(root == null) return sub;
+        root.left = inOrderSucc(root.left, sub);
+        return root;
+    }
+
+    private Node deleteNode(Node root) {
+        if(root == null) return root;
+        else {
+            Node left = root.left;
+            Node right = root.right;
+            if(left == null) {
+                return right;
+            }
+            if(right == null) {
+                return left;
+            }
+            left.right = inOrderSucc(right, left.right);
+            return left;
+        }
+    }
+
+    public Node trimBST(Node root, int low, int high) {
+        if(root == null) return root;
+        while(root != null && (root.data < low || root.data > high)) {
+            root = deleteNode(root);
+        }
+        if(root == null) return root;
+        if(root.left != null) root.left = trimBST(root.left, low, high);
+        if(root.right != null) root.right = trimBST(root.right, low, high);
+        return root;
     }
 
     public static void main(String[] args) {}
