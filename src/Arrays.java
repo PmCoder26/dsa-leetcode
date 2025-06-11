@@ -312,6 +312,55 @@ public class Arrays {
         System.out.println(product);
     }
 
+    /*
+            Given two integer arrays nums1 and nums2, return an array of their intersection.
+            Each element in the result must be unique and you may return the result in any order.
+
+            Example 1:
+                Input: nums1 = [1,2,2,1], nums2 = [2,2]
+                Output: [2]
+            Example 2:
+                Input: nums1 = [4,9,5], nums2 = [9,4,9,8,4]
+                Output: [9,4]
+            Explanation: [4,9] is also accepted.
+     */
+    private boolean contains(int[] arr, int ele) {
+        for (int e : arr) {
+            if (e == ele) return true;
+        }
+        return false;
+    }
+
+    public int[] intersection(int[] nums1, int[] nums2) {
+        int l1 = nums1.length;
+        int l2 = nums2.length;
+        ArrayList<Integer> list = new ArrayList();
+        Set<Integer> set = new HashSet();
+
+        if (l1 <= l2) {
+            for (int x = 0; x < l1; x++) {
+                int ele = nums1[x];
+                if (!set.contains(ele) && contains(nums2, ele)) {
+                    set.add(ele);
+                }
+            }
+        } else {
+            for (int x = 0; x < l2; x++) {
+                int ele = nums2[x];
+                if (!set.contains(ele) && contains(nums1, ele)) {
+                    set.add(ele);
+                }
+            }
+        }
+
+        int[] ans = new int[set.size()];
+        int x = 0;
+        for (int e : set) {
+            ans[x++] = e;
+        }
+        return ans;
+    }
+
     public static void main(String[] args) {
 
     }

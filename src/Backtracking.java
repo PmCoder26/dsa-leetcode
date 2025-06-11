@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -85,7 +87,6 @@ public class Backtracking {
     }
 
     public static void main(String[] args){
-        ArrayList<Integer> al1 = new ArrayList<>();
-        List<Integer> l = (List<Integer>) al1.clone();
+
     }
 }
