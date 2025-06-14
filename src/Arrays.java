@@ -400,7 +400,46 @@ public class Arrays {
         return list;
     }
 
+    /*
+            You are given m arrays, where each array is sorted in ascending order.
+            You can pick up two integers from two different arrays (each array picks one) and calculate the distance.
+            We define the distance between two integers a and b to be their absolute difference |a - b|.
+            Return the maximum distance.
+
+            Example 1:
+                Input: arrays = [[1,2,3],[4,5],[1,2,3]]
+                Output: 4
+                Explanation:
+                    One way to reach the maximum distance 4 is to pick 1 in the first or third array and
+                    pick 5 in the second array.
+            Example 2:
+                Input: arrays = [[1],[1]]
+                Output: 0
+     */
+
+    public int maxDistance(List<List<Integer>> arrays) {
+        int maxDist = Integer.MIN_VALUE;
+        for(int x = 0; x < arrays.size() - 1; x++) {
+            int arr1Len = arrays.get(x).size();
+            int arr1Min = arrays.get(x).get(0);
+            int arr1Max = arrays.get(x).get(arr1Len - 1);
+            for(int y = x + 1; y < arrays.size(); y++) {
+                int arr2Len = arrays.get(y).size();
+                int arr2Min = arrays.get(y).get(0);
+                int arr2Max = arrays.get(y).get(arr2Len - 1);
+                int tempMax = Math.max((Math.abs(arr1Max - arr2Min)), Math.abs(arr2Max - arr1Min));
+                maxDist = Math.max(maxDist, tempMax);
+            }
+        }
+        return maxDist;
+    }
+
     public static void main(String[] args) {
+        List<Integer> list = new ArrayList<>();
+        list.add(1);
+        int e = list.stream()
+                .max(Integer::compareTo)
+                .get();
 
     }
 }
