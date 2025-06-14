@@ -361,6 +361,45 @@ public class Arrays {
         return ans;
     }
 
+    /*
+            Given a 2D integer array nums where nums[i] is a non-empty array of distinct positive integers,
+            return the list of integers that are present in each array of nums sorted in ascending order.
+
+            Example 1:
+                Input: nums = [[3,1,2,4,5],[1,2,3,4],[3,4,5,6]]
+                Output: [3,4]
+                Explanation:
+                The only integers present in each of nums[0] = [3,1,2,4,5], nums[1] = [1,2,3,4], and nums[2] = [3,4,5,6]
+                are 3 and 4, so we return [3,4].
+            Example 2:
+                Input: nums = [[1,2,3],[4,5,6]]
+                Output: []
+                Explanation:
+                    There does not exist any integer present both in nums[0] and nums[1], so we return an empty list [].
+     */
+
+    private void helper(int[][] nums, int idx, int target, List<Integer> list) {
+        if(idx >= nums.length) {
+            list.add(target);
+        }
+        else {
+            for(int  y = 0; y < nums[idx].length; y++) {
+                if(nums[idx][y] == target) {
+                    helper(nums, idx + 1, target, list);
+                }
+            }
+        }
+    }
+
+    public List<Integer> intersection(int[][] nums) {
+        List<Integer> list = new ArrayList<>();
+        for(int x = 0; x < nums[0].length; x++) {
+            helper(nums, 1, nums[0][x], list);
+        }
+        Collections.sort(list);
+        return list;
+    }
+
     public static void main(String[] args) {
 
     }
