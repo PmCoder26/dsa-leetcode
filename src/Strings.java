@@ -379,6 +379,31 @@ public class Strings {
         }
     }
 
+    // optimized version with memoization.
+    private Map<String, Boolean> tabs = new HashMap<>();
+
+    private boolean helper(String s1, String s2, String s3, int i, int j, int k) {
+        int s1Len = s1.length();
+        int s2Len = s2.length();
+        int s3Len = s3.length();
+        if(k == s3.length()) return i == s1Len && j == s2Len;
+        if(s1Len + s2Len != s3Len) return false;
+        String key = Integer.toString(i) + "," + Integer.toString(j);
+        if(tabs.containsKey(key)) return tabs.get(key);
+        else {
+            boolean s1True = false;
+            boolean s2True = false;
+            if(i < s1Len && s3.charAt(k) == s1.charAt(i)) s1True = helper(s1, s2, s3, i + 1, j, k + 1);
+            if(j < s2Len && s3.charAt(k) == s2.charAt(j)) s2True = helper(s1, s2, s3, i, j + 1, k + 1);
+            tabs.put(key, s1True || s2True);
+            return s1True || s2True;
+        }
+    }
+
+    public boolean isInterleaveMemo(String s1, String s2, String s3) {
+        return helper(s1, s2, s3, 0, 0, 0);
+    }
+
     public static void main(String[] args){}
 
 }
