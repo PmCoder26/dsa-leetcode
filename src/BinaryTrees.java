@@ -12,6 +12,15 @@ public class BinaryTrees {
         }
     }
 
+    private static class ListNode {
+        int data;
+        ListNode next;
+        public ListNode(int data) {
+            this.data = data;
+            this.next = null;
+        }
+    }
+
     /*
         You are given a binary tree, and you need to remove all the
          half nodes (which have only one child). Return the root node
@@ -447,7 +456,7 @@ public class BinaryTrees {
      */
 
     private int childFinder(HashMap<Integer, Integer> pre, List<Integer> inord, int start, int end) {
-        int idx = Integer.MAX_VALUE;
+        int idx = Integer.MAX_dataUE;
         int minIndex = -1;
         for (int x = start; x <= end; x++) {
             int preIndex = pre.get(inord.get(x));
@@ -580,7 +589,7 @@ public class BinaryTrees {
         helper(root.right, level + 1, dist + 1, info, isLeft);
     }
 
-    public int findBottomLeftValue(Node root) {
+    public int findBottomLeftdataue(Node root) {
         if(root.left == null && root.right == null) {
             return root.data;
         }
@@ -712,6 +721,44 @@ public class BinaryTrees {
         if(root.left != null) root.left = trimBST(root.left, low, high);
         if(root.right != null) root.right = trimBST(root.right, low, high);
         return root;
+    }
+
+    /*
+            Given a binary tree root and a linked list with head as the first node.
+            Return True if all the elements in the linked list starting from the head
+            correspond to some downward path connected in the binary tree otherwise return False.
+            In this context downward path means a path that starts at some node and goes downwards.
+
+            Example 1:
+                Input: head = [4,2,8], root = [1,4,4,null,2,2,null,1,null,6,8,null,null,null,null,1,3]
+                Output: true
+                Explanation: Nodes in blue form a subpath in the binary Tree.
+            Example 2:
+                Input: head = [1,4,2,6], root = [1,4,4,null,2,2,null,1,null,6,8,null,null,null,null,1,3]
+                Output: true
+     */
+
+    private boolean exists(ListNode head, Node root) {
+        if(root == null && head == null) return true;
+        if(root == null) return false;
+        if(head == null) return true;
+        if(root.data == head.data) {
+            return exists(head.next, root.left) || exists(head.next, root.right);
+        }
+        return false;
+    }
+
+    public boolean isSubPath(ListNode head, Node root) {
+        if(root == null && head == null) return true;
+        if(root == null || head == null) return false;
+        else {
+            if(head.data == root.data) {
+                if(exists(head.next, root.left) || exists(head.next, root.right)) return true;
+            }
+            boolean left = isSubPath(head, root.left);
+            boolean right = isSubPath(head, root.right);
+            return left || right;
+        }
     }
 
     public static void main(String[] args) {}
