@@ -253,7 +253,7 @@ public class LinkedLists {
         else{
             Node ans = null;
             Stack<Node> st = new Stack();
-            int max = Integer.MIN_VALUE;
+            int max = Integer.MAX_VALUE;
             while(head != null){
                 st.push(head);
                 head = head.next;
@@ -330,6 +330,45 @@ public class LinkedLists {
             curr = temp;
         }
         return ansStart;
+    }
+
+    /*
+            You are given the head of a non-empty linked-list representing a non-negative integer without
+            leading zeroes.
+            Return the head of the linked list after doubling it.
+
+            Example 1:
+                Input: head = [1,8,9]
+                Output: [3,7,8]
+                Explanation: The figure above corresponds to the given linked list which represents the number 189.
+                             Hence, the returned linked list represents the number 189 * 2 = 378.
+            Example 2:
+                Input: head = [9,9,9]
+                Output: [1,9,9,8]
+                Explanation: The figure above corresponds to the given linked list which represents the number 999.
+                             Hence, the returned linked-list reprersents the number 999 * 2 = 1998.
+     */
+
+    public Node doubleIt(Node head) {
+        if(head == null) return head;
+        else {
+            Node rev = reverse(head);
+            Node curr = rev;
+            int carry = 0;
+            while(curr != null) {
+                int sum = curr.data * 2 + carry;
+                carry = sum / 10;
+                curr.data = sum % 10;
+                curr = curr.next;
+            }
+            rev = reverse(rev);
+            if(carry != 0) {
+                Node newNode = new Node(carry);
+                newNode.next = rev;
+                rev = newNode;
+            }
+            return rev;
+        }
     }
 
     public static void main(String[] args) {
