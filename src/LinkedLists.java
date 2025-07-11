@@ -472,6 +472,33 @@ public class LinkedLists {
         }
     }
 
+
+    private int findGCD(int n1, int n2) {
+        int gcd = 1;
+        while(n1 != 0) {
+            int temp = n1;
+            n1 = n2 % n1;
+            n2 = temp;
+        }
+        return n2;
+    }
+
+    public Node insertGreatestCommonDivisors(Node head) {
+        if(head == null || head.next == null) return head;
+        else {
+            Node curr = head;
+            while(curr.next != null) {
+                int gcd = findGCD(curr.data, curr.next.data);
+                Node newNode = new Node(gcd);
+                Node temp = curr.next;
+                curr.next = newNode;
+                newNode.next = temp;
+                curr = temp;
+            }
+            return head;
+        }
+    }
+
     public static void main(String[] args) {
 
     }
