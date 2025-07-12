@@ -499,6 +499,53 @@ public class LinkedLists {
         }
     }
 
+    /*
+            Given the head of a singly linked list, sort the list using insertion sort, and return the sorted list's head.
+            The steps of the insertion sort algorithm:
+                1. Insertion sort iterates, consuming one input element each repetition and growing a sorted output list.
+                2. At each iteration, insertion sort removes one element from the input data, finds the location it
+                belongs within the sorted list and inserts it there.
+                3. It repeats until no input elements remain.
+     */
+
+    public Node insertionSortList(Node head) {
+        if(head == null || head.next == null) return head;
+        else {
+            Node preCurr = head;
+            Node curr = preCurr.next;
+            Node ans = head;
+            while(curr != null) {
+                Node temp1 = ans;   // here 'ans' will be the list head
+                Node preTemp1 = temp1;
+                boolean flag = false;
+                while(temp1 != curr) {
+                    if(curr.data < temp1.data) {
+                        Node temp2 = curr.next;
+                        if(preTemp1 == temp1) {
+                            ans = curr;
+                            curr.next = temp1;
+                        }
+                        else {
+                            curr.next = temp1;
+                            preTemp1.next = curr;
+                        }
+                        curr = temp2;
+                        preCurr.next = curr;
+                        flag = true;
+                        break;
+                    }
+                    preTemp1 = temp1;
+                    temp1 = temp1.next;
+                }
+                if(!flag) {
+                    preCurr = curr;
+                    curr = curr.next;
+                }
+            }
+            return ans;
+        }
+    }
+
     public static void main(String[] args) {
 
     }
